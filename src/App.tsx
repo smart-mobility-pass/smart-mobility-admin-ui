@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import BusManagement from './pages/BusManagement';
 import BrtManagement from './pages/BrtManagement';
+import TerManagement from './pages/TerManagement';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/admin" element={<Dashboard />} />
       <Route path="/admin/bus" element={<BusManagement />} />
       <Route path="/admin/brt" element={<BrtManagement />} />
+      <Route path="/admin/ter" element={<TerManagement />} />
     </Routes>
   );
 }

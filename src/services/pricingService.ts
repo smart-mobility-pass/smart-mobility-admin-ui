@@ -49,6 +49,7 @@ export const pricingService = {
             const zone1 = ['Petersen', 'Grande Mosquée', 'Place de la Nation', 'Dial Diop', 'Grand Dakar', 'Liberté 1', 'Sacré Coeur', 'Liberté 5', 'Liberté 6'];
             const zone2 = ['Khar Yalla', 'Scat Urbam', 'Cardinal Hyacinthe Thiandoum', 'Grand Médine', 'Police Parcelles', 'Croisement 22'];
             const zone3 = ['Parcelles', 'Ndingala', 'Golf Sud', 'Dalal Jam', 'Fith Mith', 'Golf Nord', 'Gueule Tapée', 'Guédiawaye'];
+            const terStations = ['Dakar', 'Colobane', 'Hann', 'Baux Maraîchers', 'Pikine', 'Thiaroye', 'Yeumbeul', 'Keur Massar', 'Rufisque', 'Bargny', 'Diamniadio'];
 
             // Fallback data for UI testing if backend is down
             return [
@@ -57,7 +58,8 @@ export const pricingService = {
                 { id: 3, name: 'Ligne 218: Keur Massar - Dakar', transportType: 'BUS' },
                 { id: 4, name: 'Ligne B1 (Omnibus)', transportType: 'BRT', stations: [...zone1, ...zone2, ...zone3] },
                 { id: 5, name: 'Ligne B2 (Express)', transportType: 'BRT', stations: ['Petersen', 'Place de la Nation', 'Grand Dakar', 'Sacré Coeur', 'Grand Médine', 'Dalal Jam', 'Guédiawaye'] },
-                { id: 6, name: 'Ligne B3 (Express)', transportType: 'BRT', stations: ['Petersen', 'Place de la Nation', 'Khar Yalla', 'Croisement 22', 'Parcelles', 'Gueule Tapée', 'Guédiawaye'] }
+                { id: 6, name: 'Ligne B3 (Express)', transportType: 'BRT', stations: ['Petersen', 'Place de la Nation', 'Khar Yalla', 'Croisement 22', 'Parcelles', 'Gueule Tapée', 'Guédiawaye'] },
+                { id: 7, name: 'TER: Ligne de la Banlieue', transportType: 'TER', stations: terStations }
             ];
         }
     },

@@ -43,12 +43,12 @@ const Dashboard: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="card bg-base-200 shadow-sm">
+                        <div className="card bg-base-200 shadow-sm border border-error/20 hover:border-error transition-colors">
                             <div className="card-body">
-                                <h2 className="card-title">Réseau TER</h2>
-                                <p>Contrôler la régularité et les incidents sur les voies TER.</p>
+                                <h2 className="card-title text-error">Réseau TER</h2>
+                                <p>Contrôler la régularité et les tarifs par zone du Train Express Régional.</p>
                                 <div className="card-actions justify-end mt-4">
-                                    <button className="btn btn-primary btn-sm">Gérer</button>
+                                    <Link to="/admin/ter" className="btn btn-error btn-sm">Gérer</Link>
                                 </div>
                             </div>
                         </div>
