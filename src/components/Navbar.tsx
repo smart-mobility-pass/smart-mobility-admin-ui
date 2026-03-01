@@ -1,52 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import keycloak from '../keycloak';
 
 const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    // Check auth status on mount and when location changes
-    const checkAuth = () => {
-      setIsAuthenticated(localStorage.getItem('isAuthenticated') === 'true');
-    };
-    checkAuth();
-    // Setting up a basic interval since localStorage changes don't fire events in the same window natively 
-    // without a storage event listener, but location changes often cover it for SPAs.
+    setIsAuthenticated(!!keycloak.authenticated);
+    if (keycloak.tokenParsed) {
+      setUsername(keycloak.tokenParsed.preferred_username || '');
+    }
   }, [location]);
 
   const confirmLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userRole');
-    setIsAuthenticated(false);
-    setShowLogoutConfirm(false);
-    navigate('/');
+    keycloak.logout({ redirectUri: window.location.origin });
   };
 
   return (
     <>
       <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50 px-4 w-full justify-between items-center overflow-x-auto flex-nowrap">
-        <div className="flex-none pr-4">
-          <Link to="/" className="text-2xl font-black tracking-tight text-primary hover:opacity-80 transition-opacity cursor-pointer whitespace-nowrap">
+        <div className="flex-none pr-4 flex items-center gap-3">
+          <Link to={isAuthenticated ? "/admin" : "/"} className="text-2xl font-black tracking-tight text-primary hover:opacity-80 transition-opacity cursor-pointer whitespace-nowrap">
             SmartMobility<span className="text-base-content">SN</span>
           </Link>
+          {isAuthenticated && (
+            <div className="hidden lg:block text-xs font-bold opacity-50 uppercase tracking-widest pl-2 border-l border-base-content/10">
+              Admin: {username}
+            </div>
+          )}
         </div>
         <div className="flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <ul className="menu menu-horizontal px-1 font-medium text-sm md:text-base gap-1 flex-nowrap justify-center min-w-max w-full">
             {isAuthenticated && (
-              <li>
-                <Link to="/admin" className="hover:bg-primary/10 text-primary font-bold rounded-lg flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                  Accueil
-                </Link>
-              </li>
+              <>
+                <li>
+                  <Link to="/admin" className="hover:bg-primary/10 text-primary font-bold rounded-lg flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                    Accueil
+                  </Link>
+                </li>
+                <li><Link to="/admin/bus" className="hover:bg-base-200 rounded-lg">Réseau Bus</Link></li>
+                <li><Link to="/admin/brt" className="hover:bg-base-200 rounded-lg">Lignes BRT</Link></li>
+                <li><Link to="/admin/ter" className="hover:bg-base-200 rounded-lg">Horaires TER</Link></li>
+              </>
             )}
-            <li><a className="hover:bg-base-200 rounded-lg">A propos</a></li>
-            <li><a className="hover:bg-base-200 rounded-lg">Réseau Bus</a></li>
-            <li><a className="hover:bg-base-200 rounded-lg">Lignes BRT</a></li>
-            <li><a className="hover:bg-base-200 rounded-lg">Horaires TER</a></li>
+            <li><Link to="/" className="hover:bg-base-200 rounded-lg">A propos</Link></li>
           </ul>
         </div>
         <div className="flex-none pl-4">
