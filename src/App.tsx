@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -11,10 +12,38 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/admin" element={<Dashboard />} />
-      <Route path="/admin/bus" element={<BusManagement />} />
-      <Route path="/admin/brt" element={<BrtManagement />} />
-      <Route path="/admin/ter" element={<TerManagement />} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requiredRole="ROLE_ADMIN">
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/bus"
+        element={
+          <ProtectedRoute requiredRole="ROLE_ADMIN">
+            <BusManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/brt"
+        element={
+          <ProtectedRoute requiredRole="ROLE_ADMIN">
+            <BrtManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ter"
+        element={
+          <ProtectedRoute requiredRole="ROLE_ADMIN">
+            <TerManagement />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
