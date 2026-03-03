@@ -17,6 +17,7 @@ export interface FareSection {
     sectionOrder: number;
     priceIncrement: number;
     stationName?: string;
+    zone?: number;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -34,6 +35,8 @@ export interface DiscountRule {
     percentage: number;
     priority: number;
     condition: string;
+    startHour?: string;
+    endHour?: string;
     active: boolean;
     createdAt?: string;
     updatedAt?: string;
@@ -76,6 +79,22 @@ export const pricingService = {
         throw new Error(response.error || 'Failed to create transport line');
     },
 
+    updateTransportLine: async (id: number, line: Partial<TransportLine>): Promise<TransportLine> => {
+        const response = await apiService.put<TransportLine>(`${API_URL}/transport-lines/${id}`, line);
+        if (response.data) {
+            return response.data;
+        }
+        throw new Error(response.error || 'Failed to update transport line');
+    },
+
+    deleteTransportLine: async (id: number): Promise<void> => {
+        const response = await apiService.delete(`${API_URL}/transport-lines/${id}`);
+        if (response.status !== 0 && response.status < 400) {
+            return;
+        }
+        throw new Error(response.error || 'Failed to delete transport line');
+    },
+
     // Fare Sections
     getFareSections: async (): Promise<FareSection[]> => {
         const response = await apiService.get<FareSection[]>(`${API_URL}/fare-sections`);
@@ -88,6 +107,22 @@ export const pricingService = {
             return response.data;
         }
         throw new Error(response.error || 'Failed to create fare section');
+    },
+
+    updateFareSection: async (id: number, section: Partial<FareSection>): Promise<FareSection> => {
+        const response = await apiService.put<FareSection>(`${API_URL}/fare-sections/${id}`, section);
+        if (response.data) {
+            return response.data;
+        }
+        throw new Error(response.error || 'Failed to update fare section');
+    },
+
+    deleteFareSection: async (id: number): Promise<void> => {
+        const response = await apiService.delete(`${API_URL}/fare-sections/${id}`);
+        if (response.status !== 0 && response.status < 400) {
+            return;
+        }
+        throw new Error(response.error || 'Failed to delete fare section');
     },
 
     // Zones
@@ -148,5 +183,13 @@ export const pricingService = {
             return;
         }
         throw new Error(response.error || 'Failed to delete discount rule');
+    },
+
+    updateDiscountRule: async (id: number, rule: Partial<DiscountRule>): Promise<DiscountRule> => {
+        const response = await apiService.put<DiscountRule>(`${API_URL}/discount-rules/${id}`, rule);
+        if (response.data) {
+            return response.data;
+        }
+        throw new Error(response.error || 'Failed to update discount rule');
     }
 };
