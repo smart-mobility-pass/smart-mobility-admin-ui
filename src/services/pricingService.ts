@@ -15,7 +15,6 @@ export interface FareSection {
     id?: number;
     lineId: number;
     sectionOrder: number;
-    priceIncrement: number;
     stationName?: string;
     zone?: number;
     createdAt?: string;

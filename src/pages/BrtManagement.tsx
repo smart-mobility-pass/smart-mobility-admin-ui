@@ -19,11 +19,10 @@ const BrtManagement: React.FC = () => {
     const [newZoneNumber, setNewZoneNumber] = useState<number | ''>('');
     const [newRuleType, setNewRuleType] = useState('OFFPEAK');
     const [newPercentage, setNewPercentage] = useState<number | ''>('');
-    const [newCondition, setNewCondition] = useState('BRT');
+    const [newCondition] = useState('BRT');
     const [sectionOrder, setSectionOrder] = useState<number | ''>('');
     const [stationName, setStationName] = useState('');
     const [zone, setZone] = useState<number | ''>('');
-    const [priceIncrement, setPriceIncrement] = useState<number | ''>(0);
     const [editingSectionId, setEditingSectionId] = useState<number | null>(null);
 
     const loadData = async () => {
@@ -84,8 +83,7 @@ const BrtManagement: React.FC = () => {
             lineId: selectedLineId,
             sectionOrder: Number(sectionOrder),
             stationName: stationName.trim(),
-            zone: zone !== '' ? Number(zone) : undefined,
-            priceIncrement: Number(priceIncrement) || 0
+            zone: zone !== '' ? Number(zone) : undefined
         };
         try {
             if (editingSectionId) {
@@ -104,8 +102,24 @@ const BrtManagement: React.FC = () => {
         setSectionOrder('');
         setStationName('');
         setZone('');
-        setPriceIncrement(0);
         setEditingSectionId(null);
+    };
+
+    const handleEditSection = (section: FareSection) => {
+        setEditingSectionId(section.id || null);
+        setSectionOrder(section.sectionOrder);
+        setStationName(section.stationName || '');
+        setZone(section.zone || '');
+    };
+
+    const handleDeleteSection = async (id: number) => {
+        if (!window.confirm("Supprimer cette station ?")) return;
+        try {
+            await pricingService.deleteFareSection(id);
+            loadData();
+        } catch (error) {
+            alert("Erreur lors de la suppression.");
+        }
     };
 
     const handleCreateZone = async (e: React.FormEvent) => {

@@ -16,7 +16,7 @@ const BusManagement: React.FC = () => {
     const [newLineName, setNewLineName] = useState('');
     const [sectionOrder, setSectionOrder] = useState<number | ''>('');
     const [stationName, setStationName] = useState('');
-    const [priceIncrement, setPriceIncrement] = useState<number | ''>('');
+    const [zone, setZone] = useState<number | ''>('');
     const [editingSectionId, setEditingSectionId] = useState<number | null>(null);
 
     const loadData = async () => {
@@ -68,13 +68,13 @@ const BusManagement: React.FC = () => {
 
     const handleCreateOrUpdateSection = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedLineId || sectionOrder === '' || priceIncrement === '') return;
+        if (!selectedLineId || sectionOrder === '') return;
 
         const sectionData: Partial<FareSection> = {
             lineId: selectedLineId,
             sectionOrder: Number(sectionOrder),
             stationName: stationName.trim() || undefined,
-            priceIncrement: Number(priceIncrement)
+            zone: zone !== '' ? Number(zone) : undefined
         };
 
         try {
@@ -93,7 +93,7 @@ const BusManagement: React.FC = () => {
     const resetSectionForm = () => {
         setSectionOrder('');
         setStationName('');
-        setPriceIncrement('');
+        setZone('');
         setEditingSectionId(null);
     };
 
@@ -101,7 +101,7 @@ const BusManagement: React.FC = () => {
         setEditingSectionId(section.id || null);
         setSectionOrder(section.sectionOrder);
         setStationName(section.stationName || '');
-        setPriceIncrement(section.priceIncrement);
+        setZone(section.zone || '');
     };
 
     const handleDeleteSection = async (id: number) => {
@@ -199,7 +199,7 @@ const BusManagement: React.FC = () => {
                                                             <tr className="bg-base-300/50">
                                                                 <th className="w-16">Ordre</th>
                                                                 <th>Station / Arrêt</th>
-                                                                <th>Incrément (FCFA)</th>
+                                                                <th>Zone</th>
                                                                 <th className="text-right w-32 px-6">Actions</th>
                                                             </tr>
                                                         </thead>
@@ -213,9 +213,11 @@ const BusManagement: React.FC = () => {
                                                                     </td>
                                                                     <td><span className="font-bold text-base-content/80 text-lg">{section.stationName || `Section ${section.sectionOrder}`}</span></td>
                                                                     <td>
-                                                                        <div className="badge badge-success gap-1 font-mono font-bold py-3">
-                                                                            +{section.priceIncrement}
-                                                                        </div>
+                                                                        {section.zone ? (
+                                                                            <div className="badge badge-primary badge-outline font-bold">Zone {section.zone}</div>
+                                                                        ) : (
+                                                                            <span className="opacity-30">-</span>
+                                                                        )}
                                                                     </td>
                                                                     <td className="text-right px-6">
                                                                         <div className="flex gap-1 justify-end">
@@ -248,16 +250,13 @@ const BusManagement: React.FC = () => {
                                                             <label className="label-text mb-2 font-bold text-xs uppercase tracking-wider text-base-content/60">Ordre</label>
                                                             <input type="number" min="1" className="input input-bordered focus:input-secondary transition-all font-mono font-bold" value={sectionOrder} onChange={(e) => setSectionOrder(e.target.value ? Number(e.target.value) : '')} required />
                                                         </div>
-                                                        <div className="form-control md:col-span-6">
+                                                        <div className="form-control md:col-span-8">
                                                             <label className="label-text mb-2 font-bold text-xs uppercase tracking-wider text-base-content/60">Nom de la Station</label>
                                                             <input type="text" placeholder="ex: Colobane" className="input input-bordered focus:input-secondary transition-all text-lg" value={stationName} onChange={(e) => setStationName(e.target.value)} />
                                                         </div>
-                                                        <div className="form-control md:col-span-4">
-                                                            <label className="label-text mb-2 font-bold text-xs uppercase tracking-wider text-base-content/60">Prix (+ FCFA)</label>
-                                                            <div className="join">
-                                                                <input type="number" min="0" step="50" className="input input-bordered join-item w-full focus:input-secondary transition-all font-bold text-success" value={priceIncrement} onChange={(e) => setPriceIncrement(e.target.value ? Number(e.target.value) : '')} required />
-                                                                <span className="join-item btn btn-ghost bg-base-200 border-base-300 pointer-events-none px-2 text-xs">FCFA</span>
-                                                            </div>
+                                                        <div className="form-control md:col-span-2">
+                                                            <label className="label-text mb-2 font-bold text-xs uppercase tracking-wider text-base-content/60">Zone</label>
+                                                            <input type="number" min="1" className="input input-bordered focus:input-secondary transition-all font-mono font-bold" value={zone} onChange={(e) => setZone(e.target.value ? Number(e.target.value) : '')} />
                                                         </div>
                                                         <div className="md:col-span-12 flex justify-end gap-3 mt-2">
                                                             {editingSectionId && (
