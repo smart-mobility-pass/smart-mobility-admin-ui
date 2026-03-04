@@ -21,24 +21,26 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50 px-4 w-full justify-between items-center overflow-x-auto flex-nowrap">
-        <div className="flex-none pr-4 flex items-center gap-3">
-          <Link to={isAuthenticated ? "/admin" : "/"} className="text-2xl font-black tracking-tight text-primary hover:opacity-80 transition-opacity cursor-pointer whitespace-nowrap">
+      <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50 px-6 w-full flex justify-between items-center border-b border-base-200">
+        <div className="flex-none flex items-center gap-4">
+          <Link to={isAuthenticated ? "/admin" : "/"} className="text-2xl font-black tracking-tight text-primary hover:opacity-80 transition-all cursor-pointer whitespace-nowrap">
             SmartMobility<span className="text-base-content">SN</span>
           </Link>
           {isAuthenticated && (
-            <div className="hidden lg:block text-xs font-bold opacity-50 uppercase tracking-widest pl-2 border-l border-base-content/10">
+            <div className="hidden xl:flex items-center gap-2 text-[10px] font-bold opacity-40 uppercase tracking-[0.2em] pl-4 border-l border-base-content/20 ml-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></div>
               Admin: {username}
             </div>
           )}
         </div>
-        <div className="flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <ul className="menu menu-horizontal px-1 font-medium text-sm md:text-base gap-1 flex-nowrap justify-center min-w-max w-full">
+
+        <div className="flex-grow flex justify-center">
+          <ul className="menu menu-horizontal px-1 font-semibold text-sm gap-2 whitespace-nowrap">
             {isAuthenticated && (
               <>
                 <li>
-                  <Link to="/admin" className="hover:bg-primary/10 text-primary font-bold rounded-lg flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                  <Link to="/admin" className={`px-4 py-2 flex items-center gap-2 transition-all duration-300 rounded-xl ${location.pathname === '/admin' ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'hover:bg-primary/10 hover:text-primary'}`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                     Accueil
                   </Link>
                 </li>
@@ -47,9 +49,41 @@ const Navbar: React.FC = () => {
                 <li><Link to="/admin/ter" className="hover:bg-base-200 rounded-lg">Horaires TER</Link></li>
                 <li><Link to="/admin/discounts" className="hover:bg-base-200 rounded-lg">Remises</Link></li>
                 <li><Link to="/admin/catalog" className="hover:bg-base-200 rounded-lg">Catalogue</Link></li>
+
+                {/* DROPDOWN: Gestion Réseau */}
+                <li className="dropdown dropdown-hover">
+                  <div tabIndex={0} role="button" className="px-4 py-2 flex items-center gap-2 transition-all duration-300 hover:bg-base-200 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    Gestion Réseau
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-40 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
+                  </div>
+                  <ul tabIndex={0} className="dropdown-content z-[100] menu p-2 shadow-2xl bg-base-100 rounded-2xl w-56 mt-1 border border-base-300">
+                    <li><Link to="/admin/bus" className="hover:bg-primary/10 hover:text-primary py-3 rounded-xl flex items-center gap-3">🚌 <span className="flex-1">Lignes Bus</span></Link></li>
+                    <li><Link to="/admin/brt" className="hover:bg-primary/10 hover:text-primary py-3 rounded-xl flex items-center gap-3">⚡ <span className="flex-1">Lignes BRT</span></Link></li>
+                    <li><Link to="/admin/ter" className="hover:bg-primary/10 hover:text-primary py-3 rounded-xl flex items-center gap-3">🚆 <span className="flex-1">Lignes TER</span></Link></li>
+                  </ul>
+                </li>
+
+                {/* DROPDOWN: Offres & Tarifs */}
+                <li className="dropdown dropdown-hover">
+                  <div tabIndex={0} role="button" className="px-4 py-2 flex items-center gap-2 transition-all duration-300 hover:bg-base-200 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Offres & Tarifs
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-40 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
+                  </div>
+                  <ul tabIndex={0} className="dropdown-content z-[100] menu p-2 shadow-2xl bg-base-100 rounded-2xl w-64 mt-1 border border-base-300">
+                    <li><Link to="/admin/discounts" className="hover:bg-primary/10 hover:text-primary py-3 rounded-xl flex items-center gap-3">🏷️ <span className="flex-1">Règles & Tarification</span></Link></li>
+                    <li><Link to="/admin/catalog" className="hover:bg-primary/10 hover:text-primary py-3 rounded-xl flex items-center gap-3">📖 <span className="flex-1">Catalogue d'Offres</span></Link></li>
+                  </ul>
+                </li>
               </>
             )}
-            <li><Link to="/" className="hover:bg-base-200 rounded-lg">A propos</Link></li>
+            <li>
+              <Link to="/" className="px-4 py-2 hover:bg-base-200 transition-all duration-300 rounded-xl flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                A propos
+              </Link>
+            </li>
           </ul>
         </div>
         <div className="flex-none pl-4">
